@@ -9,6 +9,10 @@ const  {dbConnection} =  require('./database/config')
 const app = express();
 
 app.use(cors());
+
+//carpeta publica
+
+app.use(express.static('public'));
 app.use(express.json());
 dbConnection();
 app.use('/api/users', require('./routes/users'));
