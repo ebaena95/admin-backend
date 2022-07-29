@@ -3,18 +3,18 @@ const{check} = require('express-validator');
 const {validation} = require('../middleware/validations');
 
 const router = Router();
-const {getHospitals,newHospital,deleteHospital,updateHospital} = require('../controllers/hospital');
+const {getDoctors,newDoctor,deleteDoctor,updateDoctor} = require('../controllers/Doctor');
 const { validateJWT } = require('../middleware/validation-jwt');
 
-router.get('/',getHospitals);
+router.get('/',getDoctors);
 router.post('/', 
     [
         validateJWT,
-        check('name', 'name of hospital is required').not().isEmpty(),
+        check('name', 'name is required').not().isEmpty(),
+        check('hospital', 'valid hospital id is required').isMongoId(),
         validation
-
     ],
-    newHospital
+    newDoctor
 
     
 );
@@ -23,12 +23,11 @@ router.put('/:id',
     [
 
     ],
-    updateHospital
+    updateDoctor
     
 
 );
-router.delete('/:id',deleteHospital);
+router.delete('/:id',deleteDoctor);
 
-// 62e00a11f72f72050d7bb363
 
 module.exports = router;

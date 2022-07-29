@@ -14,6 +14,9 @@ dbConnection();
 app.use('/api/users', require('./routes/users'));
 app.use('/api/login', require('./routes/auth'));
 app.use('/api/hospital', require('./routes/hospitals'));
+app.use('/api/doctor', require('./routes/doctors'));
+app.use('/api/all', require('./routes/search'));
+app.use('/api/upload', require('./routes/uploads'));
 
 app.listen(process.env.PORT,()=>{
     console.log('back escoltant a port ' + process.env.PORT);
