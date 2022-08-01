@@ -78,7 +78,7 @@ const updateUser = async (req, res = response) =>{
                 });
             }
         }
-        campos.email = email;
+        fileds.email = email;
         const updatedUser = await User.findByIdAndUpdate(uid, fileds, {new:true});
         res.json({
             ok:true,

@@ -45,24 +45,77 @@ const newHospital = async(req,res = response) =>{
     
 }
 
-const updateHospital = (req,res = response) =>{
+const updateHospital = async(req,res = response) =>{
 
-    res.json({
+    const id = req.params.id;
+    const name = req.body.name;
+    const uid = req.uid;
+    console.log(name);
 
-        ok:true,
-        msg:'updateHospital'
+    try {
 
-    })
+        const hospitalDB = Hospital.findById(id);
+
+        if(!hospitalDB){
+            return res.status(404).json({
+                ok:false,
+                msg:'hospital not found'
+            });
+        }
+
+        const changesHospital ={
+            ...req.body,
+            user: uid
+        }
+
+        const updatedHospital = await Hospital.findByIdAndUpdate(id, changesHospital, {new:true});
+
+        res.json({
+
+            ok:true,
+            msg: updatedHospital
+    
+        })        
+    } catch (error) {
+
+        res.status(500).json({
+            ok:false,
+            msg:'server error'
+        })
+        
+    } 
 }
 
-const deleteHospital = (req,res = response) =>{
+const deleteHospital = async(req,res = response) =>{
 
-    res.json({
+    const id = req.params.id;
+    try { 
+        const hospitalToDelete = await Hospital.findById(id);
+        if(!hospitalToDelete){
+            return res.status(404).json({
+                ok:false,
+                msg:'hospital not found'
+            });
+    
+        }
+       
+        await Hospital.findByIdAndDelete(id);
+        res.json({
 
-        ok:true,
-        msg:'delete'
+            ok:true,
+            msg: `Hospital ${hospitalToDelete} is deleted`
+    
+        })
+        
+    } catch (error) {
 
-    })
+        res.status(500).json({
+            ok:false,
+            msg:'server error'
+        });
+        
+    }
+
 }
 
 
