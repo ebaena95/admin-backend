@@ -1,4 +1,5 @@
 const {response} = require('express');
+const doctor = require('../models/doctor');
 const Doctor = require('../models/doctor')
 
 
@@ -49,24 +50,70 @@ const newDoctor = async(req,res = response) =>{
 
 }
 
-const updateDoctor = (req,res = response) =>{
+const updateDoctor = async(req,res = response) =>{
 
-    res.json({
+    const id = req.params.id;
+    const uid = req.uid
+    try {
+        const doctor = await Doctor.findById(id);   
 
-        ok:true,
-        msg:'updateDoctor'
+        if(!doctor){
+            return res.status(404).json({
+                ok:false,
+                msg:'doctor not found'
+            }); 
+        }
+        const changesDoctor = {
+            ...req.body,
+            user:uid
 
-    })
+        }
+        const updatedDoctor = await Doctor.findByIdAndUpdate(id, changesDoctor, {new:true});
+        res.json({
+
+            ok:true,
+            msg:updatedDoctor
+    
+        })       
+    } catch (error) {
+        res.status(500).json({
+            ok:false,
+            msg:'server error'
+        })
+    }   
 }
 
 const deleteDoctor = (req,res = response) =>{
 
-    res.json({
+    const id = req.params.id;
 
-        ok:true,
-        msg:'delete'
+    try {
 
-    })
+        const doctorToDelete = Doctor.findById(id);
+
+        if(!doctorToDelete){
+            return res.status(404).json({
+                ok:false,
+                msg:'doctor not found'
+            });
+        }
+        
+
+        res.json({
+
+            ok:true,
+            msg:'delete'
+    
+        })
+        
+    } catch (error) {
+        res.status(500).json({
+            ok:false,
+            msg:'server error'
+        })
+    }
+
+    
 }
 
 
