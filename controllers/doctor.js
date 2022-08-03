@@ -83,13 +83,13 @@ const updateDoctor = async(req,res = response) =>{
     }   
 }
 
-const deleteDoctor = (req,res = response) =>{
+const deleteDoctor = async(req,res = response) =>{
 
     const id = req.params.id;
 
     try {
 
-        const doctorToDelete = Doctor.findById(id);
+        const doctorToDelete = await Doctor.findById(id);
 
         if(!doctorToDelete){
             return res.status(404).json({
@@ -98,11 +98,11 @@ const deleteDoctor = (req,res = response) =>{
             });
         }
         
-
+        await Doctor.findByIdAndDelete(id);
         res.json({
 
             ok:true,
-            msg:'delete'
+            msg:`Doctor ${doctorToDelete} is deleted`
     
         })
         
